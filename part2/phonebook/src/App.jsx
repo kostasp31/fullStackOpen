@@ -1,6 +1,30 @@
 import { useState, useEffect } from 'react'
 import personsService from './services/persons'
 
+const NotificationSuccess = ({ message }) => {
+    if (message === null) {
+      return null
+    }
+  
+    return (
+        <div className='msgSuccess'>
+            {message}
+        </div>
+    )
+}
+
+const NotificationFailure = ({ message }) => {
+    if (message === null) {
+      return null
+    }
+  
+    return (
+        <div className='msgFail'>
+            {message}
+        </div>
+    )
+}
+
 const Person = ({person, filter, delPerson}) => {
     if (person.name.includes(filter)) {
         return (
@@ -16,7 +40,6 @@ const Title = ({title}) => <h2>{title}</h2>
 const Filter = ({filter, handleFilterChange}) => {
     return (
     <div>
-        <Title title="Notebook" />
         Filter shown with:
         <form onSubmit={(event) => event.preventDefault()}>
             <input
@@ -69,6 +92,8 @@ const App = () => {
   const [newName, setNewPerson] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [messageS, setMessageS] = useState(null)    // message for success
+  const [messageF, setMessageF] = useState(null)    // and failure
 
   const hook = () => {
     personsService
@@ -115,9 +140,27 @@ const App = () => {
                 .then(
                     response => {
                         setPersons(persons.map(n => n.id !== itm.id ? n : response.data))
+                        setNewPerson('')
+                        setNewNumber('')
+
+                        setMessageS(
+                            `Changed number of ${newPerson.name}`
+                        )
+                        setTimeout(() => {setMessageS(null)}, 5000)
+                        return
                     }
                 )
-            return
+                .catch(
+                    error => {
+                        console.log('fail')
+                        setPersons(persons.filter(n => n.id !== itm.id))
+                        setMessageF(
+                            `Information of ${newPerson.name} has already been removed from the server`
+                        )
+                        setTimeout(() => {setMessageF(null)}, 5000)
+                        return
+                    }
+                )
         }
     }
 
@@ -128,6 +171,10 @@ const App = () => {
         setNewPerson('')
         setNewNumber('')
       })  
+    setMessageS(
+      `Added ${newPerson.name} to the phonebook`
+    )
+    setTimeout(() => {setMessageS(null)}, 5000)
   }
 
   const handleNameChange = (event) => {
@@ -146,6 +193,9 @@ const App = () => {
 
   return (
     <div>
+      <Title title="Notebook" />
+      <NotificationSuccess message={messageS} />
+      <NotificationFailure message={messageF} />
       <Filter handleFilterChange={handleFilterChange} filter={filter} />
       <NewPerson 
         handleNameChange={handleNameChange} 
