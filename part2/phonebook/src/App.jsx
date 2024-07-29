@@ -114,6 +114,22 @@ const App = () => {
                 response => {
                     const newPersons = persons.filter(n => n.id !== person.id)
                     setPersons(newPersons)
+
+                    setMessageS(
+                        `Successfully deleted ${person.name}`
+                    )
+                    clearTimeout()
+                    setTimeout(() => {setMessageS(null)}, 5000)
+                }
+            )
+            .catch(
+                error => {
+                    setPersons(persons.filter(n => n.id !== person.id))
+                    setMessageF(
+                        `Information of ${person.name} has already been removed from the server`
+                    )
+                    clearTimeout()
+                    setTimeout(() => {setMessageF(null)}, 5000)
                 }
             )
     }
@@ -146,22 +162,24 @@ const App = () => {
                         setMessageS(
                             `Changed number of ${newPerson.name}`
                         )
+                        clearTimeout()
                         setTimeout(() => {setMessageS(null)}, 5000)
-                        return
                     }
                 )
                 .catch(
                     error => {
-                        console.log('fail')
+                        // console.log(`fail, gonna remove ${itm.id} ${itm.name} ${itm.number}`)
                         setPersons(persons.filter(n => n.id !== itm.id))
                         setMessageF(
                             `Information of ${newPerson.name} has already been removed from the server`
                         )
+                        clearTimeout()
                         setTimeout(() => {setMessageF(null)}, 5000)
-                        return
                     }
                 )
+                
         }
+        return
     }
 
     personsService
@@ -174,6 +192,7 @@ const App = () => {
     setMessageS(
       `Added ${newPerson.name} to the phonebook`
     )
+    clearTimeout()
     setTimeout(() => {setMessageS(null)}, 5000)
   }
 
