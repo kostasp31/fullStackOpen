@@ -86,6 +86,7 @@ const Country = ({country, toggleVisibility}) => {
       <div>
         {name} <button onClick={() => toggleVisibility(country)}>hide</button>
         <InfoCountry country={country} />
+        <hr />
       </div>
     )
   }
@@ -93,6 +94,7 @@ const Country = ({country, toggleVisibility}) => {
     return (
       <div>
         {name} <button onClick={() => toggleVisibility(country)}>show</button>
+        <hr />
       </div>
     )
   }
