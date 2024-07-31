@@ -21,30 +21,39 @@ const LanguageList = ({langs}) => {
 }
 
 const InfoCountry = ({country}) => {
-  console.log(country.languages)
+  // console.log(country.languages)
   return (
     <div>
       <h1>{country.name.common}</h1>
       <p>Capital: {country.capital}</p>
-      <p>Area: {country.area} km^2</p>
+      <p>Area: {country.area} km<sup>2</sup></p>
       <LanguageList langs={country.languages} />
       <img src={country.flags.png} />
     </div>
   )
 }
 
-const Country = ({country}) => {
+const Country = ({country, toggleVisibility}) => {
   let name = country.name.common
-  
-  return (
-    <div>
-      {/* {name} <button onClick={dispCountryinfo} >show</button> */}
-      {name} <button>show</button>
-    </div>
-  )
+
+  if (country.display === true) {
+    return (
+      <div>
+        {name} <button onClick={() => toggleVisibility(country)}>hide</button>
+        <InfoCountry country={country} />
+      </div>
+    )
+  }
+  else {
+    return (
+      <div>
+        {name} <button onClick={() => toggleVisibility(country)}>show</button>
+      </div>
+    )
+  }
 }
 
-const DisplayAll = ({countries, searchQ}) => {
+const DisplayAll = ({countries, searchQ, toggleVisibility}) => {
   const filteredCountries = countries.filter(ct => ct.name.common.toLowerCase().includes(searchQ.toLowerCase()))
   if (filteredCountries.length > 10) {
     return (
@@ -56,7 +65,7 @@ const DisplayAll = ({countries, searchQ}) => {
   else if (filteredCountries.length > 1) {
     return (
         <div>
-            { filteredCountries.map(ct => <Country country={ct} key={filteredCountries.findIndex(obj => obj.name.common===ct.name.common)} /> ) }
+            { filteredCountries.map(ct => <Country country={ct} toggleVisibility={toggleVisibility} key={filteredCountries.findIndex(obj => obj.name.common===ct.name.common)} /> ) }
         </div>
     )
   }
@@ -74,28 +83,38 @@ const DisplayAll = ({countries, searchQ}) => {
 const App = () => {
   const [searchText, setSearchText] = useState('')
   const [countries, setCountries] = useState([])
-
+  const [visibilityChanged, setVisibility] = useState(false)
+ 
   const searchTextChange = (event) => {
     setSearchText(event.target.value)
   }
 
-
+  const toggleVisibility = (country) => {
+    country.display=!country.display
+    setVisibility(!visibilityChanged)
+  }
+  
   const hook = () => {
     const allDataUrl = 'https://studies.cs.helsinki.fi/restcountries/api/all'
     axios
-      .get(allDataUrl)
-      .then(
-        (response) => {
-          setCountries(response.data);
-          // countries.map(ct => {
+    .get(allDataUrl)
+    .then(
+      (response) => {
+        const newData = [...response.data]
+        for (let key in newData) {
+          newData[key].display=false
+        }
+        setCountries(newData)
+
+        // countries.map(ct => {
           //   console.log(`${c}${ct.name.common}`)
           // })
         }
       )
-  }
-  useEffect(hook, [])
+    }
+    useEffect(hook, [])
 
-  return (
+    return (
     <>
       Find Countries<form onSubmit={(event) => event.preventDefault()}>
             <input
@@ -103,7 +122,7 @@ const App = () => {
             onChange={searchTextChange}
             />
         </form>
-        <DisplayAll countries={countries} searchQ={searchText} />
+        <DisplayAll countries={countries} searchQ={searchText} toggleVisibility={toggleVisibility} />
     </>
   )
 }
