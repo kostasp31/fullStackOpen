@@ -1,0 +1,23 @@
+GET http://localhost:3003/api/blogs
+
+###
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "How to use a pencil",
+  "author": "kostas",
+  "url": "https://www.xyz.com",
+  "likes": 32
+}
+
+###
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "You didn't find this, it found you",
+  "author": "kostasP",
+  "url": "https://www.idk.com",
+  "likes": 128
+}
