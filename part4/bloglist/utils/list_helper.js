@@ -71,10 +71,26 @@ const mostLikes = (blogs) => {
   return ret1
 }
 
+const initBlogs = [
+  {
+    title: "You didn't find this, it found you!",
+    author: "kostasP",
+    url: "https://www.idk.com",
+    likes: 128
+  },
+  {
+    title: "How to use a pencil",
+    author: "kostas",
+    url: "https://www.xyz.com",
+    likes: 32
+  }
+]
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
   mostBlogs,
-  mostLikes
+  mostLikes,
+  initBlogs
 }
