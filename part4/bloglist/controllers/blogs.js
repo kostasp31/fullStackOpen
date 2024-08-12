@@ -11,14 +11,17 @@ blogsrouter.post('/', async (request, response, next) => {
  
   const newBlog = await blog.save()
   response.status(201).json(newBlog)
-  
-  // try {
-  //   const newBlog = await blog.save()
-  //   response.status(201).json(newBlog)
-  // }
-  // catch(error) {
-  //   next(error)
-  // }
+})
+
+blogsrouter.delete('/:id', async (request, response) => {
+  await Blog.findByIdAndDelete(request.params.id)
+  response.status(204).end()
+})
+
+blogsrouter.put('/:id', async (request, response) => {
+  const blog = request.body
+  const newBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+  response.status(204).json(newBlog)
 })
 
 module.exports = blogsrouter
