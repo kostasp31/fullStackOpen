@@ -8,15 +8,18 @@ const app = require('../app')
 const api = supertest(app)
 
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 const help_func = require('../utils/list_helper')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
   await Blog.insertMany(help_func.initBlogs)
+
+  await User.deleteMany({})
 })
 
-describe('GET', () => {
+describe('GET BLOGS', () => {
   test('get /api/blogs', async () => {
     const resp = await api
       .get('/api/blogs')
@@ -40,7 +43,7 @@ describe('GET', () => {
   })
 })
 
-describe('POST', () => {
+describe('POST BLOGS', () => {
   test('post /api/blogs', async () => {
     const blogToPost = {
       "title": "Writing a supertest",
@@ -122,7 +125,7 @@ describe('POST', () => {
   })
 })
   
-describe('DELETE', () => {
+describe('DELETE BLOGS', () => {
   test('deletion of existing blog', async () => {
     const resp = await api.get('/api/blogs')
     
@@ -160,7 +163,7 @@ describe('DELETE', () => {
   })
 })
 
-describe('UPDATE', () => {
+describe('UPDATE BLOGS', () => {
   test('update number of likes in first blog', async () => {
     const resp0 = await api.get('/api/blogs')
     const blog0 = resp0.body[0]
@@ -184,6 +187,92 @@ describe('UPDATE', () => {
     assert.strictEqual(blog1.author, blog0.author)
     assert.strictEqual(blog1.title, blog0.title)
     assert.strictEqual(blog1.url, blog0.url)
+  })
+})
+
+describe('POST USERS', () => {
+  test('user creation', async () => {
+    const usr = {
+      username: "root",
+      name: "admin",
+      password: "ngurhg4Y344k"      
+    }
+
+    await api
+      .post('/api/users')
+      .send(usr)
+      .expect(201)  
+
+    const resp = await api
+      .get('/api/users')
+      .expect(200)  
+
+    assert.strictEqual(resp.body.some(us => {
+      return (
+        us.username === usr.username &&
+        us.name === usr.name
+      )
+    }), true)
+
+  })
+
+  test('user with short username', async () => {
+    const usr = {
+      username: "Ko",
+      name: "Koats",
+      password: "fheuihf"
+    }
+
+    const resp = await api
+      .post('/api/users')
+      .send(usr)
+      .expect(400)
+
+    // console.log(resp.body.error)
+    assert.strictEqual((resp.body.error).includes("shorter than the minimum allowed length (3)"), true)
+  })
+
+  test('user with short password', async () => {
+    const usr = {
+      username: "KoStis",
+      name: "Koats",
+      password: "12"
+    }
+
+    const resp = await api
+      .post('/api/users')
+      .send(usr)
+      .expect(400)
+
+    // console.log(resp.body.error)
+    assert.strictEqual((resp.body.error).includes("Password should be at least 3 characters long"), true)
+  })
+
+  test('duplicate users', async () => {
+    const usr1 = {
+      username: "user1",
+      name: "mpampis",
+      password: "572653"
+    }    
+
+    const usr2 = {
+      username: "user1",
+      name: "takis",
+      password: "wuifewtg4gv"
+    }  
+    
+    await api
+      .post('/api/users')
+      .send(usr1)
+      .expect(201)    
+
+    const resp = await api
+      .post('/api/users')
+      .send(usr2)
+      .expect(400)
+
+    assert.strictEqual((resp.body.error).includes("username must be unique"), true)
+    
   })
 })
 

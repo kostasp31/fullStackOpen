@@ -3,9 +3,10 @@ GET http://localhost:3003/api/blogs
 ###
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY2YmNiNmMxMmFmZjdjMGViZmFjNWVkZSIsImlhdCI6MTcyMzY0Nzk0OSwiZXhwIjoxNzIzNjUxNTQ5fQ.4BVT7Z5owbhtSQhb4quJfAIQgb8_R7pGYuAaRZq-HaQ
 
 {
-  "title": "How to use a pencil",
+  "title": "LAST NOTE",
   "author": "kostas",
   "url": "https://www.xyz.com",
   "likes": 32
