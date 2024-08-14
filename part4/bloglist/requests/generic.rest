@@ -3,7 +3,7 @@ GET http://localhost:3003/api/blogs
 ###
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY2YmNiNmMxMmFmZjdjMGViZmFjNWVkZSIsImlhdCI6MTcyMzY0Nzk0OSwiZXhwIjoxNzIzNjUxNTQ5fQ.4BVT7Z5owbhtSQhb4quJfAIQgb8_R7pGYuAaRZq-HaQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY2YmNiNmMxMmFmZjdjMGViZmFjNWVkZSIsImlhdCI6MTcyMzY2ODgwOSwiZXhwIjoxNzIzNjcyNDA5fQ.Lgh78DVuCspSGxvnLs5ldm8IF4XlDZ-Z7tk0KO8S4uA
 
 {
   "title": "LAST NOTE",
@@ -22,3 +22,7 @@ Content-Type: application/json
   "url": "https://www.idk.com",
   "likes": 128
 }
+
+###
+DELETE http://localhost:3003/api/blogs/66bd19f1bad132252a0f3be2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY2YmNiNmMxMmFmZjdjMGViZmFjNWVkZSIsImlhdCI6MTcyMzY2OTIxMSwiZXhwIjoxNzIzNjcyODExfQ._v3Oq_0AQZSB8ULPZOS8FNhpSoBnSP-Ace1rfLVJVro
