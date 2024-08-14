@@ -12,11 +12,44 @@ const User = require('../models/user')
 
 const help_func = require('../utils/list_helper')
 
+let token = ''
 beforeEach(async () => {
   await Blog.deleteMany({})
-  await Blog.insertMany(help_func.initBlogs)
-
   await User.deleteMany({})
+  // await Blog.insertMany(help_func.initBlogs)
+
+  const usr = {
+    "username": "root",
+    "name": "Superuser",
+    "password": "olympiakos"
+  }
+  
+  const log = {
+    "username": "root",
+    "password": "olympiakos"
+  }
+
+  const resp = await api
+    .post('/api/users')
+    .send(usr)
+    .expect(201)
+
+  const resp1 = await api
+    .post('/api/login')
+    .send(log)
+    .expect(200)
+
+  token = resp1.body.token
+
+  await api
+    .post('/api/blogs')
+    .set({ Authorization: `Bearer ${token}` })
+    .send(help_func.initBlogs[0])
+
+  await api
+    .post('/api/blogs')
+    .set({ Authorization: `Bearer ${token}` })
+    .send(help_func.initBlogs[1])
 })
 
 describe('GET BLOGS', () => {
@@ -53,10 +86,11 @@ describe('POST BLOGS', () => {
     }
     
     const resp = await api
-    .post('/api/blogs')
-    .send(blogToPost)
-    .expect(201)
-    .expect('Content-Type', /application\/json/)
+      .post('/api/blogs')
+      .set({ Authorization: `Bearer ${token}` })
+      .send(blogToPost)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
 
     // also get blogs to find the one just sent
     const resp1 = await api.get('/api/blogs')
@@ -83,6 +117,7 @@ describe('POST BLOGS', () => {
     
     const resp = await api
     .post('/api/blogs')
+    .set({ Authorization: `Bearer ${token}` })
     .send(blogToPost)
     .expect(201)
     .expect('Content-Type', /application\/json/)
@@ -115,13 +150,27 @@ describe('POST BLOGS', () => {
     
     const resp1 = await api
     .post('/api/blogs')
+    .set({ Authorization: `Bearer ${token}` })
     .send(blogToPost1)
     .expect(400)
     
     const resp2 = await api
     .post('/api/blogs')
+    .set({ Authorization: `Bearer ${token}` })
     .send(blogToPost2)
     .expect(400)
+  })
+
+  test('no token provided fails', async () => {
+    const blogToPost1 = {
+      "author": "Pouthenas",
+      "url": "https://www.missingTitle.com",
+    }
+  
+    await api
+      .post('/api/blogs')
+      .send(blogToPost1)
+      .expect(401)
   })
 })
   
@@ -132,6 +181,7 @@ describe('DELETE BLOGS', () => {
     const toDel = resp.body[0]
     await api
     .delete(`/api/blogs/${toDel.id}`)
+    .set({ Authorization: `Bearer ${token}` })
     .expect(204)
     
     const resp1 = await api.get('/api/blogs')
@@ -153,12 +203,14 @@ describe('DELETE BLOGS', () => {
   test('deletion of non existing blog, right id format', async () => {
     await api
       .delete(`/api/blogs/69ba154301f29ae5b643342b`)
-      .expect(204)
+      .set({ Authorization: `Bearer ${token}` })
+      .expect(401)
   })
 
   test('deletion of non existing blog, wrong id format', async () => {
     await api
       .delete(`/api/blogs/45`)
+      .set({ Authorization: `Bearer ${token}` })
       .expect(400)
   })
 })
@@ -193,9 +245,9 @@ describe('UPDATE BLOGS', () => {
 describe('POST USERS', () => {
   test('user creation', async () => {
     const usr = {
-      username: "root",
-      name: "admin",
-      password: "ngurhg4Y344k"      
+      username: "Takis",
+      name: "Takis Tatakis",
+      password: "hfurwgfg874"      
     }
 
     await api
