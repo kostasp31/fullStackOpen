@@ -1,0 +1,9 @@
+.msg {
+  color: rgb(6, 88, 31);
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}

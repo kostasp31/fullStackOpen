@@ -1,0 +1,28 @@
+GET http://localhost:3003/api/blogs
+
+###
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY2YmNiNmMxMmFmZjdjMGViZmFjNWVkZSIsImlhdCI6MTcyMzY3MDQwMywiZXhwIjoxNzIzNjc0MDAzfQ.eD0AQDlOmpcDvauMBwWI-5qdqULNAKbYzv-Rtuv5k6w
+
+{
+  "title": "LAST NOTE",
+  "author": "kostas",
+  "url": "https://www.xyz.com",
+  "likes": 32
+}
+
+###
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "You didn't find this, it found you",
+  "author": "kostasP",
+  "url": "https://www.idk.com",
+  "likes": 128
+}
+
+###
+DELETE http://localhost:3003/api/blogs/66bd1e84593afc63f929cc6e
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY2YmNiNmMxMmFmZjdjMGViZmFjNWVkZSIsImlhdCI6MTcyMzY3MDQwMywiZXhwIjoxNzIzNjc0MDAzfQ.eD0AQDlOmpcDvauMBwWI-5qdqULNAKbYzv-Rtuv5k6w
