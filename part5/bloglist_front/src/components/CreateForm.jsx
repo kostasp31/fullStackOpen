@@ -1,12 +1,25 @@
-const CreateForm = ({
-    handleSubmit,
-    title,
-    setTitle,
-    author,
-    setAuthor,
-    url,
-    setUrl
-  }) => {
+import { useState } from 'react'
+
+const CreateForm = ({createBlog}) => {
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+
+    try {
+      createBlog({title, author, url})
+
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+    }
+    catch (exception) {
+      console.log('Submit failed')
+    }
+  }
+
   return (
     <div>
     <h2>Create new</h2>

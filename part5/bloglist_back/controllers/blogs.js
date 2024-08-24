@@ -62,6 +62,16 @@ blogsrouter.delete('/:id', async (request, response) => {
 })
 
 blogsrouter.put('/:id', async (request, response) => {
+  const decodedToken = jwtV.verify(request.token, process.env.SECRET)
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'invalid token' })
+  }
+
+  // get the user of the token
+  const user = await User.findById(decodedToken.id)
+  if (!user)
+    return response.status(401).json({ error: 'invalid token' })
+  
   const blog = request.body
   const newBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
   response.status(204).json(newBlog)

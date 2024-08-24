@@ -12,10 +12,6 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
-
   const [message, setMessage] = useState('')
 
   const createFormRef = useRef()
@@ -57,26 +53,24 @@ const App = () => {
     }
   }
   
-  const handleSubmit = async (event) => {
-    event.preventDefault()
+  const createBlog = async (obj) => {
+    const blog = await blogService.create(obj)
+    setBlogs([...blogs, blog])
+    createFormRef.current.toggleVisibility()
 
-    try {
-      const blog = await blogService.create({
-        title, author, url
-      })
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-      setBlogs([...blogs, blog])
-      createFormRef.current.toggleVisibility()
+    setMessage(`a new blog "${obj.title}" by ${obj.author} added`)
+    clearTimeout()
+    setTimeout(() => {setMessage(null)}, 5000)
+  }
 
-      setMessage(`a new blog "${title}" by ${author} added`)
-      clearTimeout()
-      setTimeout(() => {setMessage(null)}, 5000)
-    }
-    catch (exception) {
-      console.log('Submit failed')
-    }
+  const likePressed = async (id, obj) => {
+    const upd = await blogService.update(id, obj)
+  }
+
+  const deleteBlog = async (id) => {
+    const resp = await blogService.del(id)
+    const newBlogs = blogs.filter((bl) => {return bl.id !== id})
+    setBlogs(newBlogs)
   }
   
   const logoutUser = () => {
@@ -126,18 +120,14 @@ const App = () => {
 
       <Togglable buttonLabel='create' ref={createFormRef}>
         <CreateForm
-          handleSubmit={handleSubmit}
-          title={title}
-          setTitle={setTitle}
-          author={author}
-          setAuthor={setAuthor}
-          url={url}
-          setUrl={setUrl}
+          createBlog={createBlog}
         />
       </Togglable>
 
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+      <br />
+
+      {blogs.sort((firstItem, secondItem) => secondItem.likes - firstItem.likes).map(blog =>
+        <Blog key={blog.id} blog={blog} like={likePressed} del={deleteBlog} userName={user.username}/>
       )}
     </div>
   )
