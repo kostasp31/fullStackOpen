@@ -52,12 +52,12 @@ const Blog = ({ blog, like, userName, del }) => {
   }
 
   return (
-    <div style={blogStyle}>
-      &quot;{blog.title}&quot;, by {blog.author}
+    <div style={blogStyle} className='blogClass'>
+      <p>&quot;{blog.title}&quot;, by {blog.author}</p>
       <div style={hideWhenVisible}>
         <button onClick={toggleVisibility}>view</button>
       </div>
-      <div style={showWhenVisible}>
+      <div style={showWhenVisible} className='moreInfo'>
         <button onClick={toggleVisibility}>hide</button>
         <div>
           {blog.url}
