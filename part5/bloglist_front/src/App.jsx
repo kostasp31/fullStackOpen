@@ -11,6 +11,7 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [resort, setResort] = useState(0)
 
   const [message, setMessage] = useState('')
 
@@ -63,6 +64,15 @@ const App = () => {
   }
 
   const likePressed = async (id, obj) => {
+    setResort(resort+1)
+
+    let blog = blogs
+    const objIndex = blog.findIndex(obj => obj.id === id)
+    blog[objIndex].likes = obj.likes
+
+    // console.log(blog)
+    setBlogs(blog)
+
     const upd = await blogService.update(id, obj)
   }
 
@@ -126,7 +136,7 @@ const App = () => {
       <br />
 
       {blogs.sort((firstItem, secondItem) => secondItem.likes - firstItem.likes).map(blog =>
-        <Blog key={blog.id} blog={blog} like={likePressed} del={deleteBlog} userName={user.username} />
+        <Blog key={blog.id} blog={blog} like={likePressed} del={deleteBlog} user={user} />
       )}
     </div>
   )

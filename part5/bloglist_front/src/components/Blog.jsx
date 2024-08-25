@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog, like, userName, del }) => {
+const Blog = ({ blog, like, user, del }) => {
   const [visible, setVisible] = useState(false)
   const [likes, setLikes] = useState(blog.likes)
 
   Blog.propTypes = {
     blog: PropTypes.object.isRequired,
     like: PropTypes.func.isRequired,
-    userName: PropTypes.string.isRequired,
+    user: PropTypes.object.isRequired,
     del: PropTypes.func.isRequired
   }
 
@@ -16,7 +16,7 @@ const Blog = ({ blog, like, userName, del }) => {
   const showWhenVisible = { display: visible ? 'inline' : 'none' }
 
   const showIfOwner = {
-    display: blog.user.username === userName ? '' : 'none',
+    display: (blog.user.id === user.id) || (blog.user === user.id) ? '' : 'none',
     color: 'red',
     backgroundColor: 'white',
     borderRadius: '4px'
@@ -53,7 +53,7 @@ const Blog = ({ blog, like, userName, del }) => {
 
   return (
     <div style={blogStyle} className='blogClass'>
-      <p style={{display: 'inline'}} id='shortInfo'>&quot;{blog.title}&quot;, by {blog.author}</p>
+      <p style={{ display: 'inline' }} id='shortInfo'>&quot;{blog.title}&quot;, by {blog.author}</p>
       <div style={hideWhenVisible}>
         <button onClick={toggleVisibility}>view</button>
       </div>
@@ -65,7 +65,7 @@ const Blog = ({ blog, like, userName, del }) => {
           likes:{likes}
           <button onClick={likePressed}>like</button>
           <br />
-          {blog.user.username || userName}
+          {blog.user.username || user.name}
           <br />
           <button onClick={deleteB} style={showIfOwner}>remove</button>
         </div>
