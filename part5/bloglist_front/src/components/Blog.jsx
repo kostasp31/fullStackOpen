@@ -53,13 +53,13 @@ const Blog = ({ blog, like, userName, del }) => {
 
   return (
     <div style={blogStyle} className='blogClass'>
-      <p id='shortInfo'>&quot;{blog.title}&quot;, by {blog.author}</p>
+      <p style={{display: 'inline'}} id='shortInfo'>&quot;{blog.title}&quot;, by {blog.author}</p>
       <div style={hideWhenVisible}>
         <button onClick={toggleVisibility}>view</button>
       </div>
       <div style={showWhenVisible} className='moreInfo'>
         <button onClick={toggleVisibility}>hide</button>
-        <div>
+        <div id='longInfo'>
           {blog.url}
           <br />
           likes:{likes}

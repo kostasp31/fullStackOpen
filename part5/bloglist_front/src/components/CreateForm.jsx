@@ -6,7 +6,7 @@ const CreateForm = ({ createBlog }) => {
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
-  CreateForm.PropTypes = {
+  CreateForm.propTypes = {
     createBlog: PropTypes.func.isRequired
   }
 

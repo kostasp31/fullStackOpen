@@ -26,14 +26,17 @@ describe('blog components', async () => {
   test('renders title, author, not url and likes', () => {
     const cont = container.querySelector('#shortInfo')
     expect(cont).toHaveTextContent(`${blg.title}`)
-    expect(cont).toBeInTheDocument(`${blg.author}`)
+    expect(cont).toHaveTextContent(`${blg.author}`)
     
-    // expect url, likes prestnt in component, they are not visible though
-    const cont1 = container.querySelector('.moreInfo')
+    // expect url, likes prestnt in component
+    const cont1 = container.querySelector('#longInfo')
     expect(cont1).toHaveTextContent(`${blg.url}`)
-    expect(cont1).toBeInTheDocument(`likes: ${blg.likes}`)
-    expect(cont1).toHaveStyle('display: none')  
+    expect(cont1).toHaveTextContent(`likes:${blg.likes}`)
     
+    // div in whick component belongs is not visible
+    const cont2 = container.querySelector('.moreInfo')
+    expect(cont2).toHaveStyle('display: none')  
+
   })
 
   test('renders url, likes, after clicking view', async () => {
@@ -43,9 +46,9 @@ describe('blog components', async () => {
     await user.click(button)
     
     // after clicking url, likes must be visible
-    const cont = container.querySelector('.moreInfo')
+    const cont = container.querySelector('#longInfo')
     expect(cont).toHaveTextContent(`${blg.url}`)
-    expect(cont).toBeInTheDocument(`likes: ${blg.likes}`)
+    expect(cont).toHaveTextContent(`likes:${blg.likes}`)
     expect(cont).not.toHaveStyle('display: none')
   })
 
