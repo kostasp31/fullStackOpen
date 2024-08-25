@@ -53,7 +53,7 @@ const Blog = ({ blog, like, userName, del }) => {
 
   return (
     <div style={blogStyle} className='blogClass'>
-      <p>&quot;{blog.title}&quot;, by {blog.author}</p>
+      <p id='shortInfo'>&quot;{blog.title}&quot;, by {blog.author}</p>
       <div style={hideWhenVisible}>
         <button onClick={toggleVisibility}>view</button>
       </div>
