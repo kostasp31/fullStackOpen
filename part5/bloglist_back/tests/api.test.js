@@ -229,6 +229,7 @@ describe('UPDATE BLOGS', () => {
 
     await api
       .put(`/api/blogs/${blog0.id}`)
+      .set({ Authorization: `Bearer ${token}` })
       .send(updatedblog)
       .expect(204)
 

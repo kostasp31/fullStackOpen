@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 
 const Message = ({ msg, usr }) => {
   Message.propTypes = {
-    usr: PropTypes.object.isRequired
+    usr: PropTypes.object
   }
 
   if (!usr) {
