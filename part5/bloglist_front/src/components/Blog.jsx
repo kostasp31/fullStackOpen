@@ -65,7 +65,7 @@ const Blog = ({ blog, like, user, del }) => {
           likes:{likes}
           <button onClick={likePressed}>like</button>
           <br />
-          {blog.user.username || user.name}
+          {blog.user.username || user.username}
           <br />
           <button onClick={deleteB} style={showIfOwner}>remove</button>
         </div>
