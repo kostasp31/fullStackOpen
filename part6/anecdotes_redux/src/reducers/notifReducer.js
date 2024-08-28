@@ -15,5 +15,13 @@ const notSlice = createSlice({
   }
 })
 
-export const { changeNotif, removeNotfi } = notSlice.actions
+export const { changeNotif, removeNotfi, toggleNotification } = notSlice.actions
 export default notSlice.reducer
+
+export const setNotification = (text, sec) => {
+  return async dispatch => {
+    dispatch(changeNotif(text))
+    clearTimeout()
+    setTimeout(() => {dispatch(removeNotfi())}, sec*1000)
+  }
+}

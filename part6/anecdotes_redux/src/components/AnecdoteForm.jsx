@@ -1,22 +1,20 @@
 import { useDispatch } from 'react-redux'
-import { createAnecdote } from '../reducers/anecdoteReducer'
-import { changeNotif, removeNotfi } from '../reducers/notifReducer'
+import { createAn } from '../reducers/anecdoteReducer'
+import { setNotification } from '../reducers/notifReducer'
 
 const AnecdoteForm = () => {
   const dispatch = useDispatch()
 
-  const addAnecdote = (event) => {
+  const addAnecdote = async (event) => {
     event.preventDefault()
     // get the value from the uncontrolled form
     const content = event.target.anecdote.value
     // make the input field blank 
     event.target.anecdote.value = ''
 
-    dispatch(changeNotif(`You added: ${content}`))
-    clearTimeout()
-    setTimeout(() => {dispatch(removeNotfi())}, 5000)
+    dispatch(setNotification(`You added: ${content}`, 5))
 
-    dispatch(createAnecdote(content))
+    dispatch(createAn(content))
   }
   
   return (
