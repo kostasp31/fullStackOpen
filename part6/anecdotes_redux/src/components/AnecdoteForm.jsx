@@ -1,5 +1,6 @@
 import { useDispatch } from 'react-redux'
 import { createAnecdote } from '../reducers/anecdoteReducer'
+import { changeNotif, removeNotfi } from '../reducers/notifReducer'
 
 const AnecdoteForm = () => {
   const dispatch = useDispatch()
@@ -10,6 +11,11 @@ const AnecdoteForm = () => {
     const content = event.target.anecdote.value
     // make the input field blank 
     event.target.anecdote.value = ''
+
+    dispatch(changeNotif(`You added: ${content}`))
+    clearTimeout()
+    setTimeout(() => {dispatch(removeNotfi())}, 5000)
+
     dispatch(createAnecdote(content))
   }
   
