@@ -1,7 +1,7 @@
 import { createAnecdote } from '../requests'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-const AnecdoteForm = ({ dispatch, timeoutID }) => {
+const AnecdoteForm = ({ dispatch, timeoutID, setTimeoutID }) => {
 
   const queryClient = useQueryClient()
 
@@ -14,16 +14,18 @@ const AnecdoteForm = ({ dispatch, timeoutID }) => {
         type: 'SET',
         payload: `ADDED ${data.content}!!`
       })
-      clearTimeout()
-      setTimeout(() => {dispatch( {type: 'RESET'} )}, 5000)
+      clearTimeout(timeoutID)
+      const id = setTimeout(() => {dispatch( {type: 'RESET'} )}, 5000)
+      setTimeoutID(id)
     },
     onError: (error) => {
       dispatch({
         type: 'SET',
         payload: error.response.data.error
       })
-      clearTimeout()
-      setTimeout(() => {dispatch( {type: 'RESET'} )}, 5000)
+      clearTimeout(timeoutID)
+      const id = setTimeout(() => {dispatch( {type: 'RESET'} )}, 5000)
+      setTimeoutID(id)
     }
   })
 
@@ -33,8 +35,6 @@ const AnecdoteForm = ({ dispatch, timeoutID }) => {
     event.target.anecdote.value = ''
 
     newAnMut.mutate({ content, votes: 0 })
-
-
   }
 
   return (

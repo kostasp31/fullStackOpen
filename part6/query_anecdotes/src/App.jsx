@@ -3,7 +3,7 @@ import Notification from './components/Notification'
 import { getAnecdotes, updateAnecdote } from './requests'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 
-import { useReducer } from 'react'
+import { useReducer, useState } from 'react'
 
 const notifReducer = (state, action) => {
   switch (action.type) {
@@ -21,7 +21,8 @@ const App = () => {
   const [message, messageDispatch] = useReducer(notifReducer, '')
   
   const queryClient = useQueryClient()
-  // let timeoutID = undefined
+
+  const [timeoutID, setTimeoutID] = useState(undefined)
 
   const updAnMut = useMutation({
     mutationFn: updateAnecdote,
@@ -36,8 +37,9 @@ const App = () => {
       type: 'SET',
       payload: `VOTED FOR ${anecdote.content}!!`
     })
-    clearTimeout()
-    setTimeout(() => { messageDispatch({ type: 'RESET' }) }, 5000)
+    clearTimeout(timeoutID)
+    const id = setTimeout(() => { messageDispatch({ type: 'RESET' }) }, 5000)
+    setTimeoutID(id)
   }
 
   const { isPending, isError, data, error } = useQuery({
@@ -61,7 +63,7 @@ const App = () => {
       <h3>Anecdote app</h3>
 
       <Notification notif={message} />
-      <AnecdoteForm dispatch={messageDispatch} />
+      <AnecdoteForm dispatch={messageDispatch} timeoutID={timeoutID} setTimeout={setTimeoutID} />
 
       {anecdotes.map(anecdote =>
         <div key={anecdote.id}>
